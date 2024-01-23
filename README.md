@@ -1,8 +1,8 @@
-# Kotlin Multiplatform Weather App (Work in Progress)
+# Kotlin Multiplatform Weather App
 
 ## Overview
 
-This project is a work in progress and serves as a demonstration of Kotlin Multiplatform
+This project serves as a demonstration of Kotlin Multiplatform
 capabilities for developing a weather application. The goal is to create a simple cross-platform app
 that shows the weather of a specified location by implementing API calls.
 
@@ -18,3 +18,7 @@ platform-specific code is located in `androidMain` and `iosMain`.
 - API calls to retrieve weather information.
 - Common code for shared functionality.
 - Platform-specific implementations for Android and iOS.
+
+## Demo
+
+![Demo Gif](demo.gif)
