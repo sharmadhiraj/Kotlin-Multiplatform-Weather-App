@@ -2,22 +2,42 @@
 
 ## Overview
 
-This project serves as a demonstration of Kotlin Multiplatform
-capabilities for developing a weather application. The goal is to create a simple cross-platform app
-that shows the weather of a specified location by implementing API calls.
+A small Kotlin Multiplatform app that shows the current weather and a 5 day forecast for any city.
+Data comes from the free [Open-Meteo](https://open-meteo.com/) forecast and geocoding APIs (no API
+key needed).
 
 ## Project Structure
 
-The project structure follows Kotlin Multiplatform conventions and is organized into common,
-Android, and iOS source sets. Shared code is placed in the `commonMain` source set, and
-platform-specific code is located in `androidMain` and `iosMain`.
+- `shared`: Kotlin Multiplatform module (`commonMain`, `androidMain`, `iosMain`, `commonTest`).
+    - `WeatherScreen` / `AppTheme`: the Compose Multiplatform UI, shared by both platforms.
+    - `WeatherRepository`: Ktor client (timeouts, JSON, non-2xx treated as errors). Injectable for
+      tests.
+    - `WeatherStore`: shared presenter exposing a `StateFlow<WeatherUiState>` with `search`,
+      `refresh` and `toggleUnit`.
+    - `WeatherFormatter`: maps API models to display strings (units, dates, WMO weather codes).
+    - `MainViewController` (`iosMain`): hosts the shared UI in a `UIViewController`.
+- `androidApp`: thin shell, `MainActivity` and a `MainViewModel` that hosts the shared store.
+- `iosApp`: thin SwiftUI shell that embeds the shared Compose UI.
 
 ## Features
 
-- Cross-platform development with Kotlin Multiplatform.
-- API calls to retrieve weather information.
-- Common code for shared functionality.
-- Platform-specific implementations for Android and iOS.
+- Search any city, default is Berlin.
+- Current temperature, condition, humidity, wind and a 5 day forecast.
+- Switch between °C and °F.
+- Loading, error and retry states.
+
+## Requirements
+
+- JDK 17
+- Android Studio (latest stable) for the Android app
+- Xcode for the iOS app
+
+## Build and Run
+
+- Android: open the project in Android Studio and run the `androidApp` configuration, or
+  `./gradlew :androidApp:assembleDebug`.
+- iOS: open `iosApp/iosApp.xcodeproj` in Xcode and run.
+- Tests: `./gradlew :shared:testDebugUnitTest`
 
 ## Demo
 
