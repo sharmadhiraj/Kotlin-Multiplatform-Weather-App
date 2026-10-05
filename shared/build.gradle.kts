@@ -3,17 +3,18 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    kotlin("plugin.serialization") version "2.2.10"
-    id("co.touchlab.skie") version "0.10.6"
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.kotlinCompose)
+    alias(libs.plugins.composeMultiplatform)
 }
 
 kotlin {
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -26,6 +27,10 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.client.core)
@@ -40,17 +45,20 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.ktor.client.mock)
         }
     }
 }
 
 android {
     namespace = "np.com.dhirajsharma.kotlinmultiplatformweatherapp"
-    compileSdk = 36
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = 21
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
-}
-dependencies {
-    implementation(libs.androidx.core.i18n)
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
